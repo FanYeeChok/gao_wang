@@ -2,7 +2,7 @@
     package="com.example.gao_wang">
    <application
         android:label="gao_wang"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

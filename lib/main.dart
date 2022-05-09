@@ -18,8 +18,8 @@ class MyApp extends StatelessWidget {
       ),
       // home: MyHomePage(title: '高王观世音经'),
       home: DefaultTabController(
-              length: 3,
-              child: MyHomePage(title: '高王观世音经'),
+              length: 4,
+              child: MyHomePage(title: '南无高王观世音经'),
             ),
     );
   }
