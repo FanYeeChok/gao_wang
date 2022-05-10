@@ -1,5 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:gao_wang/home/tab-benefit.dart';
+import 'package:gao_wang/home/tab-menu.dart';
 import 'package:gao_wang/home/tab-read.dart';
+import 'package:gao_wang/home/tab-video.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -11,6 +17,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  @override
+  void initState() {
+    super.initState();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,35 +49,40 @@ class _MyHomePageState extends State<MyHomePage> {
       body: TabBarView(
         physics: BouncingScrollPhysics(),
         children: [
-          // Center(
-          //     child: Text(
-          //   article.isEmpty? "loading": article['title'],
-          //   // style: TextStyle(fontSize: 32),
-          // )),
           TabRead(),
-          Icon(Icons.directions_transit),
-          Icon(Icons.directions_bike),
-          Icon(Icons.directions_bike),
+          TabVideo(),
+          TabBenefit(),
+          TabMenu(),
         ],
-      // body: Center(
-      //   child: Column(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     children: <Widget>[
-      //       Text(
-      //         'You have pushed the button this many times:',
-      //       ),
-      //       Text(
-      //         '$_counter',
-      //         style: Theme.of(context).textTheme.headline4,
-      //       ),
-      //     ],
-      //   ),
-      // ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _incrementCounter,
-      //   tooltip: 'Increment',
-      //   child: Icon(Icons.add),
       ),
     );
   }
+}
+
+InterstitialAd _interstitialAd;
+int _numInterstitialLoadAttempts = 0;
+const int maxFailedLoadAttempts = 3;
+
+void _createInterstitialAd() {
+  InterstitialAd.load(
+      adUnitId: Platform.isAndroid
+          ? 'ca-app-pub-3940256099942544/1033173712'
+          : 'ca-app-pub-3940256099942544/4411468910',
+      // request: request,
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (InterstitialAd ad) {
+          print('$ad loaded');
+          _interstitialAd = ad;
+          _numInterstitialLoadAttempts = 0;
+          _interstitialAd.setImmersiveMode(true);
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          print('InterstitialAd failed to load: $error.');
+          _numInterstitialLoadAttempts += 1;
+          _interstitialAd = null;
+          if (_numInterstitialLoadAttempts < maxFailedLoadAttempts) {
+            _createInterstitialAd();
+          }
+        },
+      ));
 }

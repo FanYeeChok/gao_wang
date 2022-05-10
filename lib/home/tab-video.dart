@@ -1,88 +1,121 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:video_player/video_player.dart';
 
-class TabRead extends StatefulWidget {
+import '../shared/video/video-player.dart';
+
+class TabVideo extends StatefulWidget {
+
   @override
-  _TabReadState createState() => _TabReadState();
+  _TabVideoState createState() => _TabVideoState();
 }
 
-class _TabReadState extends State<TabRead> {
-
-  Map<String, dynamic> article = new Map<String, dynamic>();
-  List<String> descList =[];
+class _TabVideoState extends State<TabVideo> {
 
   @override
-    void initState() {
-      super.initState();
-      readJson();
-    }
+  void initState() {
+    super.initState();
+  }
 
-  // Fetch content from the json file
-  Future<void> readJson() async {
-    final String response = await rootBundle.loadString('assets/json/gaowang.json');
-    final data = await json.decode(response);
-
-    setState(() {
-      article = data;
-
-      var tagsJson = data['desc'];
-      descList = tagsJson != null ? List.from(tagsJson).cast<String>() : null;
-    });
+  @override
+  void dispose() {
+    super.dispose();
   }
 
 @override
   Widget build(BuildContext context) {
-    // return Center(
-    //           child: Text(
-    //             article.isEmpty? "loading": article['title'],
-    //         // style: TextStyle(fontSize: 32),
-    //           )
-    //         );
-    return Row(
-          children: [
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.all(10),
-                  child: SingleChildScrollView(
-                    child:Column(
-                    crossAxisAlignment: CrossAxisAlignment.start ,
-                    children : [
-                      // Text(
-                      // "This text is very very very very very very very very very very very very very very very very very very very very very very very very very long",
-                      // )
-                      // Text("\n奉請八大菩薩："),
-                      RichText(
-                        text: TextSpan(
-                            // text: '高王觀世音真經（高王經）',
-                            text: article.isEmpty? "loading": article['title'],
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 21,
-                                fontWeight: FontWeight.bold),
-                            children: 
-                            descList.isNotEmpty? <TextSpan>[
-                              for (var item in descList)
-                              TextSpan(
-                                  // text: "\n奉請八大菩薩：",
-                                  text: item,
-                                  style: TextStyle(
-                                      color: Colors.black54,
-                                      fontSize: 17,
-                                      // fontWeight: FontWeight.bold,
-                                      ),
-                              ),
-                            ] : <TextSpan>[]
-                        ),
-                      ),
-                    ],
-                    ),
+    // return Row(
+    //       children: [
+    //           Expanded(
+    //             child: Container(
+    //               padding: EdgeInsets.all(10),
+    //               child: SingleChildScrollView(
+    //                 child:Column(
+    //                 crossAxisAlignment: CrossAxisAlignment.start ,
+    //                 children : [
+    //                   VideoItem(
+    //                     videoPlayerController: VideoPlayerController.asset(
+    //                       'assets/video/Butterfly-209.mp4',
+    //                     ),
+    //                     looping: true,
+    //                     autoplay: true,
+    //                   ),
+    //                 ],
+    //                 ),
+    //               ),
+    //             ),
+    //         ),
+    //       ],
+    //     );
+
+    // return SingleChildScrollView(
+    //   child: Column(
+    //     children: <Widget>[
+    //       Container(
+    //         padding: const EdgeInsets.only(top: 20.0),
+    //       ),
+    //       const Text('With assets mp4'),
+    //       Container(
+    //         padding: const EdgeInsets.all(20),
+    //         child: AspectRatio(
+    //           aspectRatio: _controller.value.aspectRatio,
+    //           child: Stack(
+    //             alignment: Alignment.bottomCenter,
+    //             children: <Widget>[
+    //               VideoPlayer(_controller),
+    //               // _ControlsOverlay(controller: _controller),
+    //               VideoProgressIndicator(_controller, allowScrubbing: true),
+    //             ],
+    //           ),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
+
+
+    // return ListView(
+    //     children: <Widget>[
+    //       VideoItem(
+    //         videoPlayerController: VideoPlayerController.asset(
+    //           'assets/video/Butterfly-209.mp4',
+    //         ),
+    //         looping: true,
+    //         autoplay: false,
+    //       ),
+    //     ],
+    // );
+    // VideoPlayerController _controller = VideoPlayerController.asset('assets/video/Butterfly-209.mp4');
+    VideoPlayerController _controller = VideoPlayerController.network(
+                'https://filedn.com/lqdL3qjUIOwpNp0bzRsB3zY/gaowang/video/nian-song.mp4'
+            );
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.only(top: 20.0),
+          ),
+          const Text('念诵'),
+          Container(
+            padding: const EdgeInsets.all(20),
+            child: AspectRatio(
+              aspectRatio: _controller.value.aspectRatio,
+              child: Stack(
+                alignment: Alignment.bottomCenter,
+                children: <Widget>[
+                  VideoItem(
+                    videoPlayerController: _controller,
+                    looping: true,
+                    autoplay: false,
                   ),
-                ),
+                ]
+              ),
             ),
-          ],
-        );
+          ),
+        ],
+      ),
+    );
+
   }
 }
 
