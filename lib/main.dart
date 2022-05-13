@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'home/home.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
+  // thing to add
+  // RequestConfiguration configuration = RequestConfiguration(testDeviceIds: ['8A26531922F86AE0']); //poco x3
+  // MobileAds.instance.updateRequestConfiguration(configuration);
   runApp(MyApp());
 }
 
