@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+import '../shared/amod-service.dart';
 import '../shared/network-web-service.dart';
 import '../shared/video/video-player.dart';
 import 'benefit/BenefitList.dart';
@@ -15,10 +16,13 @@ class TabBenefit extends StatefulWidget {
 
 class _TabBenefitState extends State<TabBenefit> {
 
+  AdmobService admobService = new AdmobService();
+
   @override
   void initState() {
     super.initState();
     fetchData();
+    admobService.createRewardedAd();
   }
 
   @override
@@ -84,7 +88,8 @@ class _TabBenefitState extends State<TabBenefit> {
                           return TextButton.icon(
                             icon: Icon(Icons.play_circle_outline_rounded),
                             label: Text(textLabel),
-                            onPressed: () async {
+                            onPressed: () {
+                              admobService.showRewardedAd();
                             },
                           );
                         }

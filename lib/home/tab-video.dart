@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gao_wang/home/video/VideoFollowList.dart';
 import 'package:video_player/video_player.dart';
 
+import '../shared/amod-service.dart';
 import '../shared/network-web-service.dart';
 import '../shared/video/video-player.dart';
 
@@ -14,9 +15,12 @@ class TabVideo extends StatefulWidget {
 
 class _TabVideoState extends State<TabVideo> {
 
+  AdmobService admobService = new AdmobService();
+
   @override
   void initState() {
     super.initState();
+    admobService.createRewardedAd();
   }
 
   @override
@@ -86,7 +90,8 @@ class _TabVideoState extends State<TabVideo> {
                           return TextButton.icon(
                             icon: Icon(Icons.play_circle_outline_rounded),
                             label: Text(textLabel),
-                            onPressed: () async {
+                            onPressed: () {
+                              admobService.showRewardedAd();
                             },
                           );
                         }
